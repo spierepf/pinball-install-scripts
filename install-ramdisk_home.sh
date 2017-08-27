@@ -23,6 +23,8 @@ fi
 
 # Author: Peter-Frank Spierenburg <spierepf@hotmail.com>
 
+date >> /var/log/ramdisk-home.log 2>&1
+echo $1 >> /var/log/ramdisk-home.log 2>&1
 case "$1" in
 start)
     if [ ! -d /tmp/ramdisk ]
@@ -30,7 +32,7 @@ start)
         mkdir /tmp/ramdisk
         chmod 777 /tmp/ramdisk
         mount -t tmpfs tmpfs /tmp/ramdisk
-        rsync -a /home /tmp/ramdisk --delete
+        rsync -av /home /tmp/ramdisk >> /var/log/ramdisk-home.log 2>&1
         mount --bind /tmp/ramdisk/home /home
     fi
 	;;
@@ -39,7 +41,7 @@ stop)
     if [ -d /tmp/ramdisk ]
     then
         umount /home
-        rsync -a /tmp/ramdisk/home / --delete
+        rsync -a /tmp/ramdisk/home / >> /var/log/ramdisk-home.log 2>&1
         umount /tmp/ramdisk
         rm -rf /tmp/ramdisk
     fi
