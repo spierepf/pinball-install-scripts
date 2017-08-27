@@ -1,21 +1,8 @@
 #!/bin/bash
 
-sudo mv /etc/network/interfaces /etc/network/interfaces.orig
-cat <<EOF | sudo tee /etc/network/interfaces
-auto lo
-iface lo inet loopback
+mv /etc/network/interfaces /etc/network/interfaces.orig
+head -n4 /etc/network/interfaces.orig > /etc/network/interfaces
+head -n8 /etc/network/interfaces.orig | tail -n3 > /etc/network/interfaces.d/lo
+tail -n3 /etc/network/interfaces.orig > /etc/network/interfaces.d/ens3
 
-allow-hotplug eth0
-iface eth0 inet dhcp
-
-source /etc/network/interfaces.d/*
-EOF
-
-cat <<EOF | sudo tee /etc/network/interfaces.d/wlan0
-allow-hotplug wlan0
-iface wlan0 inet dhcp
-wpa-ssid @ssid@
-wpa-psk @psk@
-EOF
-
-sudo nano /etc/network/interfaces.d/wlan0
+sed -i s/auto/allow-hotplug/ /etc/network/interfaces.d/ens3
