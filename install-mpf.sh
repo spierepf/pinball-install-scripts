@@ -124,6 +124,3 @@ while true; do
   sudo nice -n -10 sudo -u hms ./mpf.sh \$MACHINE -x -v -V
 done
 EOF
-
-echo '%hms   ALL = (ALL) NOPASSWD: /usr/bin/nice,/usr/bin/renice' | sudo tee /etc/sudoers.d/hms
-sudo chmod 440 /etc/sudoers.d/hms
