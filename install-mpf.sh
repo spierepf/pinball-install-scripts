@@ -27,20 +27,12 @@ index 6d0a9dc..5c88711 100755
  
  # The line below will launch both processes in the same terminal window
  # with the output of BOTH processes going to the same window
-@@ -20,5 +20,17 @@ python mpf.py "\$@"
+@@ -20,5 +20,9 @@ python mpf.py "\$@"
  # the prompt. To use, comment out the two commands above and uncomment the 
  # line below.
  
 -#python mc.py "\$@" & python mpf.py "\$@" && echo "Killed both processes"
 +export PYTHONPATH=/usr/lib/python2.7/dist-packages
-+
-+mkdir logs
-+pushd logs
-+rm mc-last.log
-+ln -s \`ls *mc* | sort | tail -1\` mc-last.log
-+rm mpf-last.log
-+ln -s -f \`ls *mpf* | sort | tail -1\` mpf-last.log
-+popd
 +
 +python mc.py "\$@" &
 +sleep 5
