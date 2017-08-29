@@ -104,7 +104,7 @@ index 8e18950..80e4a7d 100755
 EOF
 popd
 
-cat << EOF | sudo tee /opt/kiosk.sh
+cat << 'EOF' | sudo tee /opt/kiosk.sh
 #!/bin/bash
 
 xset -dpms
@@ -116,11 +116,30 @@ amixer set Master unmute
 amixer set Master 75%
 
 MACHINE=demo_man
-cd /home/hms/mpf
 
+RAMDISK=/tmp/ramdisk
+mkdir $RAMDISK
+chmod 777 $RAMDISK
+mount -t tmpfs tmpfs $RAMDISK
+
+SOURCE=/home/hms
+
+DIRS=mpf
 while true; do
-  killall -9 python
-  killall -9 pypy
-  sudo nice -n -10 sudo -u hms ./mpf.sh \$MACHINE -x -v -V
+    for dir in $DIRS
+    do
+        rsync -av /home/hms/$dir /tmp/ramdisk
+    done
+
+    pushd /tmp/ramdisk/mpf
+    killall -9 python
+    killall -9 pypy
+    sudo nice -n -10 sudo -u hms ./mpf.sh $MACHINE -x -v -V
+    popd
+
+    for dir in $DIRS
+    do
+        rsync -av /tmp/ramdisk/$dir /home/hms
+    done
 done
 EOF
