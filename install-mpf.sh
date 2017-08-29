@@ -112,7 +112,7 @@ MACHINE=demo_man
 RAMDISK=/tmp/ramdisk
 mkdir $RAMDISK
 chmod 777 $RAMDISK
-mount -t tmpfs tmpfs $RAMDISK
+sudo mount -t tmpfs tmpfs $RAMDISK
 
 SOURCE=/home/hms
 
