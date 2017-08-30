@@ -107,7 +107,7 @@ start-pulseaudio-x11
 amixer set Master unmute
 amixer set Master 75%
 
-MACHINE=demo_man
+MACHINE=/home/hms/nelson2
 
 RAMDISK=/tmp/ramdisk
 mkdir $RAMDISK
@@ -116,12 +116,9 @@ sudo mount -t tmpfs tmpfs $RAMDISK
 
 SOURCE=/home/hms
 
-DIRS=mpf
 while true; do
-    for dir in $DIRS
-    do
-        rsync -av /home/hms/$dir /tmp/ramdisk
-    done
+    rm /tmp/ramdisk/mpf/logs/*
+    rsync -av --exclude 'mpf/logs' /home/hms/mpf /tmp/ramdisk
 
     pushd /tmp/ramdisk/mpf
     killall -9 python
@@ -129,9 +126,12 @@ while true; do
     sudo nice -n -10 sudo -u hms ./mpf.sh $MACHINE -x -v -V
     popd
 
-    for dir in $DIRS
+    rsync -av /tmp/ramdisk/mpf /home/hms
+    for type in mc mpf
     do
-        rsync -av /tmp/ramdisk/$dir /home/hms
+        logfile=`basename /tmp/ramdisk/mpf/logs/*$type*`
+        rm /home/hms/mpf/logs/last-$type.log
+        ln -s /home/hms/mpf/logs/$logfile /home/hms/mpf/logs/last-$type.log
     done
 done
 EOF
