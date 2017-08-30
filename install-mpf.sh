@@ -108,6 +108,7 @@ EOF
 
 cat << 'EOF' | sudo tee /opt/kiosk/config
 MACHINE=demo_man
+DIRECTORIES="mpf"
 EOF
 
 cat << 'EOF' | sudo tee /opt/kiosk/loop.sh
@@ -116,7 +117,10 @@ cat << 'EOF' | sudo tee /opt/kiosk/loop.sh
 . /opt/kiosk/config
 
 rm /tmp/ramdisk/mpf/logs/*
-rsync -av --exclude 'mpf/logs' /home/hms/mpf /tmp/ramdisk
+for directory in $DIRECTORIES
+do
+    rsync -av --exclude 'mpf/logs' /home/hms/$directory /tmp/ramdisk
+done
 
 pushd /tmp/ramdisk/mpf
 killall -9 python
@@ -124,7 +128,11 @@ killall -9 pypy
 sudo nice -n -10 sudo -u hms ./mpf.sh $MACHINE -x -v -V
 popd
 
-rsync -av /tmp/ramdisk/mpf /home/hms
+for directory in $DIRECTORIES
+do
+    rsync -av /tmp/ramdisk/$directory /home/hms
+done
+
 for type in mc mpf
 do
     logfile=`basename /tmp/ramdisk/mpf/logs/*$type*`
