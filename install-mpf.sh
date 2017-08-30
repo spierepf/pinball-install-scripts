@@ -106,10 +106,14 @@ chmod 777 /tmp/ramdisk
 sudo mount -t tmpfs tmpfs /tmp/ramdisk
 EOF
 
+cat << 'EOF' | sudo tee /opt/kiosk/config
+MACHINE=demo_man
+EOF
+
 cat << 'EOF' | sudo tee /opt/kiosk/loop.sh
 #!/bin/bash
 
-MACHINE=demo_man
+. /opt/kiosk/config
 
 rm /tmp/ramdisk/mpf/logs/*
 rsync -av --exclude 'mpf/logs' /home/hms/mpf /tmp/ramdisk
