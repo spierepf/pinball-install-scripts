@@ -96,42 +96,35 @@ index 8e18950..80e4a7d 100755
 EOF
 popd
 
-cat << 'EOF' | sudo tee /opt/kiosk.sh
-#!/bin/bash
-
-xset -dpms
-xset s off
-openbox-session &
-start-pulseaudio-x11
+cat << 'EOF' | sudo tee -a /opt/kiosk/setup.sh
 
 amixer set Master unmute
 amixer set Master 75%
 
-MACHINE=/home/hms/nelson2
+mkdir /tmp/ramdisk
+chmod 777 /tmp/ramdisk
+sudo mount -t tmpfs tmpfs /tmp/ramdisk
+EOF
 
-RAMDISK=/tmp/ramdisk
-mkdir $RAMDISK
-chmod 777 $RAMDISK
-sudo mount -t tmpfs tmpfs $RAMDISK
+cat << 'EOF' | sudo tee /opt/kiosk/loop.sh
+#!/bin/bash
 
-SOURCE=/home/hms
+MACHINE=demo_man
 
-while true; do
-    rm /tmp/ramdisk/mpf/logs/*
-    rsync -av --exclude 'mpf/logs' /home/hms/mpf /tmp/ramdisk
+rm /tmp/ramdisk/mpf/logs/*
+rsync -av --exclude 'mpf/logs' /home/hms/mpf /tmp/ramdisk
 
-    pushd /tmp/ramdisk/mpf
-    killall -9 python
-    killall -9 pypy
-    sudo nice -n -10 sudo -u hms ./mpf.sh $MACHINE -x -v -V
-    popd
+pushd /tmp/ramdisk/mpf
+killall -9 python
+killall -9 pypy
+sudo nice -n -10 sudo -u hms ./mpf.sh $MACHINE -x -v -V
+popd
 
-    rsync -av /tmp/ramdisk/mpf /home/hms
-    for type in mc mpf
-    do
-        logfile=`basename /tmp/ramdisk/mpf/logs/*$type*`
-        rm /home/hms/mpf/logs/last-$type.log
-        ln -s /home/hms/mpf/logs/$logfile /home/hms/mpf/logs/last-$type.log
-    done
+rsync -av /tmp/ramdisk/mpf /home/hms
+for type in mc mpf
+do
+    logfile=`basename /tmp/ramdisk/mpf/logs/*$type*`
+    rm /home/hms/mpf/logs/last-$type.log
+    ln -s /home/hms/mpf/logs/$logfile /home/hms/mpf/logs/last-$type.log
 done
 EOF
