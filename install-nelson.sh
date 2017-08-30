@@ -3,14 +3,14 @@
 sudo apt update
 sudo apt install -y --no-install-recommends git vorbis-tools normalize-audio
 
-mkdir workspace-pinball
-pushd workspace-pinball
-git init
-git remote add -f origin https://github.com/spierepf/workspace-pinball.git
-git config core.sparseCheckout true
-echo "kingpyn" >> .git/info/sparse-checkout
-git pull origin master
-popd
+#mkdir workspace-pinball
+#pushd workspace-pinball
+#git init
+#git remote add -f origin https://github.com/spierepf/workspace-pinball.git
+#git config core.sparseCheckout true
+#echo "kingpyn" >> .git/info/sparse-checkout
+#git pull origin master
+#popd
 
 git clone https://github.com/spierepf/nelson2.git
 pushd nelson2
