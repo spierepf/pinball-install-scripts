@@ -23,4 +23,4 @@ for i in */*.ogg ; do normalize-ogg "$i" ; done
 popd
 popd
 
-sudo sed -i s/MACHINE=[[:alnum:]_]*/MACHINE=\\/home\\/hms\\/nelson2/ /opt/kiosk.sh
+echo MACHINE=/home/hms/nelson2 | sudo tee /opt/kiosk/config
