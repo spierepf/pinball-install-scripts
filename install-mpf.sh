@@ -1,9 +1,7 @@
 #!/bin/bash
 
 sudo apt update
-sudo apt install -y --no-install-recommends git pypy python-serial python-yaml python-pygame
-
-sudo adduser $USER dialout
+sudo apt install -y --no-install-recommends git pypy python-yaml python-pygame
 
 git clone https://github.com/missionpinball/mpf.git
 pushd mpf
