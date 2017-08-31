@@ -109,6 +109,13 @@ MACHINE=demo_man
 DIRECTORIES="mpf"
 EOF
 
+cat << 'EOF' | sudo tee /opt/kiosk/mpf.sh
+#!/bin/bash
+
+./mpf.sh $1 -x -v -V
+EOF
+sudo chmod +x /opt/kiosk/mpf.sh
+
 cat << 'EOF' | sudo tee /opt/kiosk/loop.sh
 #!/bin/bash
 
@@ -123,7 +130,7 @@ done
 pushd /tmp/ramdisk/mpf
 killall -9 python
 killall -9 pypy
-sudo nice -n -10 sudo -u hms ./mpf.sh $MACHINE -x -v -V
+sudo nice -n -10 sudo -u hms /opt/kiosk/mpf.sh $MACHINE
 popd
 
 for directory in $DIRECTORIES
