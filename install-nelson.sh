@@ -23,7 +23,5 @@ for i in */*.ogg ; do normalize-ogg "$i" ; done
 popd
 popd
 
-cat << 'EOF' | sudo tee /opt/kiosk/config
-MACHINE=/tmp/ramdisk/nelson2
-DIRECTORIES="mpf nelson2"
-EOF
+echo nelson2 | sudo tee -a /opt/kiosk/directories
+echo /tmp/ramdisk/nelson2 | sudo tee /opt/kiosk/machine
