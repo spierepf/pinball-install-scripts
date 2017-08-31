@@ -12,5 +12,7 @@ popd
 
 pushd mpf/mpf/platform
 rm -f kingpyn_platform.py
-ln -s ../../../kingpyn/kingpyn_platform.py .
+ln -s ../../../workspace-pinball/kingpyn/kingpyn_platform.py .
 popd
+
+echo workspace-pinball | sudo tee -a /opt/kiosk/directories

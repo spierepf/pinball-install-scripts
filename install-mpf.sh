@@ -104,10 +104,8 @@ chmod 777 /tmp/ramdisk
 sudo mount -t tmpfs tmpfs /tmp/ramdisk
 EOF
 
-cat << 'EOF' | sudo tee /opt/kiosk/config
-MACHINE=demo_man
-DIRECTORIES="mpf"
-EOF
+echo demo_man | sudo tee /opt/kiosk/machine
+echo mpf | sudo tee /opt/kiosk/directories
 
 cat << 'EOF' | sudo tee /opt/kiosk/mpf.sh
 #!/bin/bash
@@ -119,14 +117,14 @@ sudo chmod +x /opt/kiosk/mpf.sh
 cat << 'EOF' | sudo tee /opt/kiosk/loop.sh
 #!/bin/bash
 
-. /opt/kiosk/config
-
+DIRECTORIES=`cat /opt/kiosk/directories`
 rm /tmp/ramdisk/mpf/logs/*
 for directory in $DIRECTORIES
 do
     rsync -av --exclude 'mpf/logs' /home/hms/$directory /tmp/ramdisk
 done
 
+MACHINE=`cat /opt/kiosk/machine`
 pushd /tmp/ramdisk/mpf
 killall -9 python
 killall -9 pypy
