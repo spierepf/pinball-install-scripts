@@ -7,4 +7,4 @@ wpa-ssid @ssid@
 wpa-psk @psk@
 EOF
 
-nano /etc/network/interfaces.d/wlan0
+sudo nano /etc/network/interfaces.d/wlan0
