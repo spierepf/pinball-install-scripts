@@ -1,5 +1,9 @@
 #!/bin/bash
 
+sudo apt update
+sudo apt install -y --no-install-recommends python-serial
+sudo usermod -a -G dialout hms
+
 mkdir workspace-pinball
 pushd workspace-pinball
 git init
